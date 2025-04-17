@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Flood Watch</title>
+    <style>
+        /* Keep your existing styles */
+        :root {
+            --primary: #1a73e8;
+            --background: #000;
+            --surface: #222;
+            --text: #fff;
+        }
+        
+        body {
+            background: var(--background);
+            color: var(--text);
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .login-container {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-top: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: var(--text);
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            width: 100%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit">Log In</button>
+        </form>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Preserve returnTo parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const returnTo = urlParams.get('returnTo');
+        if (returnTo) {
+            localStorage.setItem('returnTo', returnTo);
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('http://localhost:3002/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Login failed');
+                }
+
+                const data = await response.json();
+                
+                // Store token
+                localStorage.setItem('token', data.token);
+                
+                // Get redirect path
+                const returnTo = localStorage.getItem('returnTo') || 'reels.html';
+                localStorage.removeItem('returnTo');
+                
+                // Validate redirect path
+                if (!returnTo.startsWith('/')) {
+                    window.location.href = 'reels.html';
+                    return;
+                }
+
+                window.location.href = returnTo;
+
+            } catch (error) {
+                console.error('Login error:', error);
+                alert(error.message);
+            }
+        });
+    });
+    </script>
+</body>
+</html>

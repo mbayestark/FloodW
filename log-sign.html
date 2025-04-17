@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="log.css" />
+    <title>Login Page | Caged coder</title>
+  </head>
+
+  <body>
+    <div class="container" id="container">
+      <div class="form-container sign-up">
+        <form id="registrationForm">
+          <h1>Create Account</h1>
+          <div class="social-icons">
+            <!-- Social icons -->
+          </div>
+          <span>or return to <a href="/">Homescreen</a></span>
+          <input type="text" id="name" placeholder="Name" required>
+          <input type="email" id="regEmail" placeholder="Email" required>
+          <input type="password" id="regPassword" placeholder="Password" required>
+          <div id="passwordMessage" class="password-message"></div>
+          <button type="submit">Sign Up</button>
+        </form>
+      </div>
+      
+      <div class="form-container sign-in">
+        <form id="loginForm">
+          <h1>Sign In</h1>
+          <div class="social-icons">
+            <!-- Social icons -->
+          </div>
+          <span>or return to <a href="/">Homescreen</a></span>
+          <input type="email" id="loginEmail" placeholder="Email" required>
+          <input type="password" id="loginPassword" placeholder="Password" required>
+          <a href="#">Forget Your Password?</a>
+          <button type="submit">Sign In</button>
+        </form>
+      </div>
+
+      <div class="toggle-container">
+        <div class="toggle">
+          <div class="toggle-panel toggle-left">
+            <h1>Welcome Back!</h1>
+            <p>Enter your personal details to use all of site features</p>
+            <button class="hidden" id="login">Sign In</button>
+          </div>
+          <div class="toggle-panel toggle-right">
+            <h1>Hello, Friend!</h1>
+            <p>
+              Register with your personal details to use all of site features
+            </p>
+            <button class="hidden" id="register">Sign Up</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const container = document.getElementById("container");
+      const registerBtn = document.getElementById("register");
+      const loginBtn = document.getElementById("login");
+
+      const handleLoadingState = (button, isLoading) => {
+        if (isLoading) {
+          button.classList.add('button--loading');
+          button.disabled = true;
+        } else {
+          button.classList.remove('button--loading');
+          button.disabled = false;
+        }
+      };
+
+      // Login Form Handling
+      document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const button = e.target.querySelector('button[type="submit"]');
+        handleLoadingState(button, true);
+
+        try {
+          const response = await fetch('http://localhost:3002/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: document.getElementById('loginEmail').value,
+              password: document.getElementById('loginPassword').value
+            })
+          });
+
+          if (!response.ok) throw new Error('Login failed');
+          
+          const data = await response.json();
+          localStorage.setItem('token', data.token);
+          
+          const returnTo = localStorage.getItem('returnTo') || 'reels.html';
+          localStorage.removeItem('returnTo');
+          window.location.href = returnTo;
+
+        } catch (error) {
+          alert(error.message);
+        } finally {
+          handleLoadingState(button, false);
+        }
+      });
+
+      // Registration Form Handling
+      document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const button = e.target.querySelector('button[type="submit"]');
+        handleLoadingState(button, true);
+
+        try {
+          const response = await fetch('http://localhost:3002/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: document.getElementById('regEmail').value,
+              password: document.getElementById('regPassword').value,
+              username: document.getElementById('name').value
+            })
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Registration failed');
+          }
+
+          // Auto-login after registration
+          const loginResponse = await fetch('http://localhost:3002/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: document.getElementById('regEmail').value,
+              password: document.getElementById('regPassword').value
+            })
+          });
+
+          if (!loginResponse.ok) throw new Error('Auto-login failed');
+          
+          const { token } = await loginResponse.json();
+          localStorage.setItem('token', token);
+          window.location.href = '/reels';
+
+        } catch (error) {
+          alert(error.message);
+        } finally {
+          handleLoadingState(button, false);
+        }
+      });
+
+      // Password Validation
+      document.getElementById('regPassword').addEventListener('input', (e) => {
+        const messageDiv = document.getElementById('passwordMessage');
+        if (e.target.value.length >= 6) {
+          messageDiv.textContent = "Good password!";
+          messageDiv.style.color = "green";
+        } else {
+          messageDiv.textContent = "Password must be at least 6 characters.";
+          messageDiv.style.color = "red";
+        }
+      });
+
+      // Toggle functionality
+      registerBtn.addEventListener("click", () => container.classList.add("active"));
+      loginBtn.addEventListener("click", () => container.classList.remove("active"));
+
+      // Preserve returnTo parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const returnTo = urlParams.get('returnTo');
+      if (returnTo) localStorage.setItem('returnTo', returnTo);
+
+    </script>
+  </body>
+</html>

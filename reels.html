@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flood Watch - Community Stories</title>
+    <link rel="stylesheet" href="reels.css">
+</head>
+<style>
+</style>
+</head>
+<body>
+<!--Header Section -->
+<header>
+    <a href="/" class="logo-container">
+        <div class="logo">
+            <img src="media/Picture1.png" alt="Flood Watch Logo">
+        </div>
+        <h1>Flood Watch</h1>
+    </a>
+    <nav>
+        <ul>
+            <li><a href="#solution">Robots</a></li>
+            <li><a href="reels.html">Stories</a></li>
+            <li><a href="#donate">Help Us</a></li>
+            <li><a href="#">Forum</a></li>
+        </ul>
+        <button id="log_but">Log In</button>
+    </nav>
+</header>
+
+<section id="reels" class="reels-section">
+    <!-- Preserved Reels Grid -->
+    <div class="container">
+        <h2>REELS</h2>
+        <h3>THIS IS WHAT PEOPLE ARE LIVING :(</h3>
+        <div class="reels-grid" id="reelsGrid">
+            <!-- Reels will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <!-- Upload Container -->
+    <div class="upload-container">
+        <div class="upload-btn" id="uploadTrigger" 
+             role="button" 
+             tabindex="0"
+             aria-label="Upload content"
+             title="Share your story">
+            <span class="plus-icon">+</span>
+        </div>
+    </div>
+
+    
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h3>Login Required</h3>
+            <p>You need to be logged in to upload content.</p>
+            <button onclick="window.location.href='/log-sign'" class="modal-button">Go to Login</button>
+            <button onclick="closeModal()" class="modal-button">Cancel</button>
+        </div>
+    </div>
+
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const logButton = document.getElementById('log_but');
+            const uploadTrigger = document.getElementById('uploadTrigger');
+            const loginModal = document.getElementById('loginModal');
+            const mediaInput = document.getElementById('fileInput');
+            const mediaPreview = document.getElementById('mediaPreview');
+            const uploadForm = document.getElementById('uploadForm');
+            
+
+
+            // Auth functions
+            function checkAuthStatus() {
+                return localStorage.getItem('token') !== null;
+            }
+        
+            function updateAuthUI() {
+                const isLoggedIn = checkAuthStatus();
+                logButton.textContent = isLoggedIn ? 'Log Out' : 'Log In';
+                logButton.style.backgroundColor = isLoggedIn ? 'red' : '';
+            }
+        
+            // Initial setup
+            updateAuthUI();
+        
+            // Login/logout handler
+            logButton.addEventListener('click', () => {
+                if (checkAuthStatus()) {
+                    localStorage.removeItem('token');
+                    updateAuthUI();
+                    window.location.reload();
+                } else {
+                    window.location.href = '/log-sign';
+                }
+            });
+        
+            // Upload trigger
+            uploadTrigger.addEventListener('click', () => {
+                checkAuthStatus() 
+                    ? window.location.href = '/uploadPage'
+                    : loginModal.style.display = 'flex';
+            });
+
+            //Display posts from database
+            async function loadPosts() {
+                try {
+                    const response = await fetch('http://localhost:3002/videos');
+                    
+                    if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Server error: ${errorData.error || response.statusText}`);
+                    }
+
+                    const posts = await response.json();
+                    renderPosts(posts);
+
+                } catch (error) {
+                    console.error('Post loading error:', error);
+                    showErrorNotification(error.message);
+                }
+                }
+
+            function renderPosts(posts) {
+            const grid = document.getElementById('reelsGrid');
+            grid.innerHTML = posts.map(post => `
+                <div class="reel-item">
+                <div class="media-container">
+                    ${getMediaElement(post.media_url)}
+                </div>
+                <div class="post-info">
+                    <p class="caption">${post.content || ''}</p>
+                    <div class="user-info">
+                    <span class="username">${post.profiles?.username || 'Anonymous'}</span>
+                    ${post.profiles?.phone ? `<span class="phone">📞 ${post.profiles.phone}</span>` : ''}
+                    </div>
+                </div>
+                </div>
+            `).join('');
+            }
+
+            function getMediaElement(url) {
+                if (!url) return '<div class="broken-media">Media unavailable</div>';
+                return url.includes('.mp4') 
+                    ? `<video controls preload="none" autoplay="false" src="${url}"></video>`
+                    : `<img src="${url}" alt="User content">`;
+                }
+
+
+            function showErrorToast(message) {
+                const toast = document.createElement('div');
+                toast.style = `/* Add toast styling */`;
+                toast.textContent = message;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => toast.remove(), 5000);
+        }
+        // Upload trigger
+uploadTrigger.addEventListener('click', () => {
+    checkAuthStatus() 
+        ? window.location.href = '/uploadPage'
+        : loginModal.style.display = 'flex';
+});
+
+// Close modal function
+function closeModal() {
+    loginModal.style.display = 'none';
+}
+
+// Close modal when clicking outside
+loginModal.addEventListener('click', (e) => {
+    if (e.target === loginModal) {
+        closeModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && loginModal.style.display === 'flex') {
+        closeModal();
+    }
+});
+
+        loadPosts();
+            });
+    </script>
+</body>
+</html>
