@@ -116,18 +116,18 @@
                     const response = await fetch(`${baseURL}/videos`);
                     
                     if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`Server error: ${errorData.error || response.statusText}`);
+                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
                     }
-
+            
                     const posts = await response.json();
                     renderPosts(posts);
-
+            
                 } catch (error) {
                     console.error('Post loading error:', error);
-                    showErrorNotification(error.message);
+                    showErrorToast(error.message);  // <- use this instead
                 }
-                }
+            }
+
 
             function renderPosts(posts) {
             const grid = document.getElementById('reelsGrid');
