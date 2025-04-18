@@ -312,6 +312,10 @@
 
   <script>
     const logButton = document.getElementById('log_but');
+    const baseURL = window.location.hostname === "localhost"
+  ? "http://localhost:3002"
+  : "https://your-backend.onrender.com";
+
     
     function checkAuthStatus() {
       return localStorage.getItem('token') !== null;
@@ -516,7 +520,7 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
         formData.append('media', file);
 
         // Send request
-        const response = await fetch('http://localhost:3002/upload', {
+        const response = await fetch(`${baseURL}/upload`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
