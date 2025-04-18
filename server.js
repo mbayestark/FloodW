@@ -1,16 +1,17 @@
 const express = require('express');
 const path = require('path');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt'); // Currently unused – consider removing if not needed
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const multer = require('multer');
 const { createClient } = require('@supabase/supabase-js');
 const dotenv = require('dotenv');
 const stream = require('stream');
+
 dotenv.config();
+
 const app = express();
 const port = 3002;
-
 
 // Supabase Client Configuration
 const supabase = createClient(
@@ -21,43 +22,45 @@ const supabase = createClient(
 // JWT Configuration
 const JWT_SECRET = process.env.JWT_SECRET || 'your-strong-secret-key';
 const JWT_EXPIRES_IN = '2h';
-   
-// Configure CORS middleware (add before routes)
+
+// CORS Middleware
 app.use(cors({
-  origin: 'http://localhost:3002', // Update with your frontend origin
+  origin: 'http://localhost:3002', // Update with your frontend's deployed origin
   credentials: true
 }));
 
-// Middleware
+// Body parsing and static files
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'Front')));
+app.use(express.static(path.join(__dirname)));
 
 // File Upload Configuration
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Authentication Middleware
+// JWT Authentication Middleware
 const authenticateJWT = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  
+
   if (!authHeader) {
-    console.log('No authorization header');
+    console.log('Authorization header missing');
     return res.sendStatus(401);
   }
 
   const token = authHeader.split(' ')[1];
-  
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
     if (err) {
       console.log('JWT verification failed:', err.message);
       return res.sendStatus(403);
     }
-    
-    console.log('Authenticated user:', user.userId);
+
     req.user = user;
     next();
   });
 };
-// Auth Endpoints
+
+// === Auth Endpoints ===
+
+// Register
 app.post('/register', async (req, res) => {
   try {
     const { email, password, username } = req.body;
@@ -67,15 +70,13 @@ app.post('/register', async (req, res) => {
       email,
       password,
       options: {
-        data: {
-          username
-        }
+        data: { username }
       }
     });
 
     if (authError) throw authError;
 
-    // Create profile in public schema
+    // Create user profile
     const { error: profileError } = await supabase
       .from('profiles')
       .insert({
@@ -93,12 +94,14 @@ app.post('/register', async (req, res) => {
     );
 
     res.status(201).json({ token });
+
   } catch (error) {
-    console.error('Registration error:', error);
+    console.error('Registration failed:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
+// Login
 app.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -110,7 +113,6 @@ app.post('/login', async (req, res) => {
 
     if (error) throw error;
 
-    // Generate JWT
     const token = jwt.sign(
       { userId: user.id },
       JWT_SECRET,
@@ -118,35 +120,25 @@ app.post('/login', async (req, res) => {
     );
 
     res.json({ token });
+
   } catch (error) {
-    console.error('Login error:', error);
+    console.error('Login failed:', error);
     res.status(500).json({ error: error.message });
   }
 });
 
-// Protected Upload Endpoint
+// === Protected Upload Endpoint ===
 app.post('/upload', authenticateJWT, upload.single('media'), async (req, res) => {
   try {
     const { text } = req.body;
     const file = req.file;
     const userId = req.user.userId;
 
-    // Validate required fields
     if (!text || !file) {
-      return res.status(400).json({ error: 'Missing required fields' });
+      return res.status(400).json({ error: 'Missing text or media file' });
     }
 
-    console.log('Upload request from user:', userId);
-    console.log('File details:', {
-      name: file.originalname,
-      type: file.mimetype,
-      size: file.size
-    });
-
-    // Upload to Supabase Storage
     const fileName = `uploads/users/${userId}/${Date.now()}_${file.originalname}`;
-    const bufferStream = new stream.PassThrough();
-    bufferStream.end(file.buffer);
 
     const uploadResult = await supabase.storage
       .from('reels')
@@ -156,17 +148,15 @@ app.post('/upload', authenticateJWT, upload.single('media'), async (req, res) =>
       });
 
     if (uploadResult.error) {
-      console.error('Storage upload error:', uploadResult.error);
+      console.error('Supabase storage error:', uploadResult.error);
       return res.status(500).json({ error: 'File upload failed' });
     }
 
-    // Get public URL
     const publicUrl = supabase.storage
-    .from('reels')
-    .getPublicUrl(fileName).data.publicUrl;
+      .from('reels')
+      .getPublicUrl(fileName).data.publicUrl;
 
-
-    // Create post in database
+    // Insert post into DB
     const { data: post, error: postError } = await supabase
       .from('posts')
       .insert({
@@ -178,35 +168,35 @@ app.post('/upload', authenticateJWT, upload.single('media'), async (req, res) =>
       .single();
 
     if (postError) {
-      console.error('Database error:', postError);
-      return res.status(500).json({ error: 'Database operation failed' });
+      console.error('Database insert error:', postError);
+      return res.status(500).json({ error: 'Database error' });
     }
 
-    console.log('Upload successful for user:', userId);
     res.json(post);
 
   } catch (error) {
-    console.error('Server error:', error);
+    console.error('Upload error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// Public Posts Endpoint
+// === Public Videos Endpoint ===
 app.get('/videos', async (req, res) => {
   try {
     const { data, error } = await supabase
-    .from('posts')
-    .select(`
-      id,
-      content,
-      media_url,
-      created_at,
-      profiles:user_id (username, phone)
-    `)
-    .order('created_at', { ascending: false });
+      .from('posts')
+      .select(`
+        id,
+        content,
+        media_url,
+        created_at,
+        profiles:user_id (username, phone)
+      `)
+      .order('created_at', { ascending: false });
+
     if (error) {
-      console.error('Supabase error:', error);
-      return res.status(502).json({ error: 'Database connection failed' });
+      console.error('Supabase query error:', error);
+      return res.status(502).json({ error: 'Database query failed' });
     }
 
     if (!data.length) {
@@ -216,31 +206,29 @@ app.get('/videos', async (req, res) => {
     res.json(data);
 
   } catch (error) {
-    console.error('Server error:', error);
+    console.error('Videos fetch error:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// Static File Routes
+// === Static HTML Routes ===
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Front', 'index.html'));
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/reels', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Front', 'reels.html'));
+  res.sendFile(path.join(__dirname, 'reels.html'));
 });
 
 app.get('/log-sign', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Front', 'log-sign.html'));
+  res.sendFile(path.join(__dirname, 'log-sign.html'));
 });
-
-
 
 app.get('/uploadPage', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Front', 'upload.html'));
+  res.sendFile(path.join(__dirname, 'upload.html'));
 });
 
-
+// Start Server
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`✅ Server running at http://localhost:${port}`);
 });
