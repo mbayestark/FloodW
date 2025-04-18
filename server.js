@@ -223,7 +223,7 @@ app.get('/videos', async (req, res) => {
 
 // Static File Routes
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'Front', 'ex.html'));
+  res.sendFile(path.join(__dirname, 'Front', 'index.html'));
 });
 
 app.get('/reels', (req, res) => {
