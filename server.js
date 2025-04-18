@@ -31,7 +31,7 @@ app.use(cors({
 
 // Body parsing and static files
 app.use(express.json());
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, 'FloodW')));
 
 // File Upload Configuration
 const upload = multer({ storage: multer.memoryStorage() });
@@ -213,19 +213,19 @@ app.get('/videos', async (req, res) => {
 
 // === Static HTML Routes ===
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.sendFile(path.join(__dirname,'FloodW', 'index.html'));
 });
 
 app.get('/reels', (req, res) => {
-  res.sendFile(path.join(__dirname, 'reels.html'));
+  res.sendFile(path.join(__dirname,'FloodW', 'reels.html'));
 });
 
 app.get('/log-sign', (req, res) => {
-  res.sendFile(path.join(__dirname, 'log-sign.html'));
+  res.sendFile(path.join(__dirname,'FloodW', 'log-sign.html'));
 });
 
 app.get('/uploadPage', (req, res) => {
-  res.sendFile(path.join(__dirname, 'upload.html'));
+  res.sendFile(path.join(__dirname,'FloodW', 'upload.html'));
 });
 
 // Start Server
