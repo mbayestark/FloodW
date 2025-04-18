@@ -24,8 +24,14 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-strong-secret-key';
 const JWT_EXPIRES_IN = '2h';
 
 // CORS Middleware
+// Update CORS middleware to:
 app.use(cors({
-  origin: 'http://localhost:3002', // Update with your frontend's deployed origin
+  origin: [
+    'https://mbayestark.github.io', // Production frontend
+    'http://localhost:3002' // Local development (assuming frontend port)
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
