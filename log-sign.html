@@ -64,6 +64,11 @@
       const container = document.getElementById("container");
       const registerBtn = document.getElementById("register");
       const loginBtn = document.getElementById("login");
+      const baseURL = window.location.hostname === "localhost"
+  ? "http://localhost:3002"
+  : "https://your-backend.onrender.com";
+
+
 
       const handleLoadingState = (button, isLoading) => {
         if (isLoading) {
@@ -82,7 +87,7 @@
         handleLoadingState(button, true);
 
         try {
-          const response = await fetch('http://localhost:3002/login', {
+          const response = await fetch(`${baseURL}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -114,7 +119,7 @@
         handleLoadingState(button, true);
 
         try {
-          const response = await fetch('http://localhost:3002/register', {
+          const response = await fetch(`${baseURL}/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -130,7 +135,7 @@
           }
 
           // Auto-login after registration
-          const loginResponse = await fetch('http://localhost:3002/login', {
+          const loginResponse = await fetch('`${baseURL}/login`', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
