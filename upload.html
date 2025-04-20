@@ -533,7 +533,7 @@ document.getElementById('uploadForm').addEventListener('submit', async (e) => {
             // Store current path and redirect to login
             const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
             localStorage.setItem('returnTo', returnTo);
-            window.location.href = `/log-sign.html?returnTo=${returnTo}`;
+            window.location.href = `/FloodW/log-sign?returnTo=${returnTo}`;
             return;
         }
 
