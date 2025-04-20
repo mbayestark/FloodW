@@ -125,7 +125,7 @@
             // Upload trigger
             uploadTrigger.addEventListener('click', () => {
                 checkAuthStatus() 
-                    ? window.location.href = '/uploadPage'
+                    ? window.location.href = '/upload.html'
                     : loginModal.style.display = 'flex';
             });
 
@@ -182,12 +182,6 @@
                 
                 setTimeout(() => toast.remove(), 5000);
         }
-        // Upload trigger
-uploadTrigger.addEventListener('click', () => {
-    checkAuthStatus() 
-        ? window.location.href = '/uploadPage'
-        : loginModal.style.display = 'flex';
-});
 
 // Close modal function
 function closeModal() {
