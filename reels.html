@@ -83,6 +83,10 @@
             const uploadForm = document.getElementById('uploadForm');
             const navToggle = document.querySelector('.nav-toggle');
             const navMenu = document.querySelector('.nav-menu');
+            const baseURL = window.location.hostname === "localhost"
+              ? "http://localhost:3002"
+              : "https://floodwatch-kbab.onrender.com";
+
             
             navToggle.addEventListener('click', () => {
                 navMenu.classList.toggle('active');
