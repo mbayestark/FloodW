@@ -50,84 +50,154 @@
   }
 
     /* Header Styles */
-    header {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        background: var(--background);
-        padding: 1rem;
-        border-bottom: 1px solid #333;
-        z-index: 1000;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+/* ===== Header Styles ===== */
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: var(--background);
+  padding: 1rem;
+  border-bottom: 1px solid #333;
+  z-index: 1000;
+}
 
-    header a{
-        text-decoration: none;
-    }
-    .logo-container {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
 
-    .logo {
-      width: 50px;
-      height: 50px;
-      background: #1a73e8;
-      border-radius: 50%;
-      margin-right: 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-right: auto; /* Pushes brand to far left */
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
 
-    .logo img {
-        width: 60%;
-        height: 60%;
-    }
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-left: auto; /* Pushes nav elements to far right */
+}
 
-    img:hover{
-      transform: scale(1.07);
-      background-color: #1a73e8;}
+/* Rest of your existing styles remain the same */
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 1.8rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: opacity 0.3s ease;
+}
 
-    nav {
-        display: flex;
-        align-items: center;
-        gap: 2rem;
-    }
+.logo {
+  width: 50px;
+  height: 50px;
+  background: #1a73e8;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    nav ul {
-        display: flex;
-        gap: 2rem;
-        list-style: none;
-    }
+.logo img {
+  width: 60%;
+  height: 60%;
+}
 
-    nav a {
-        color: var(--text);
-        text-decoration: none;
-        font-weight: 500;
-        transition: opacity 0.3s ease;
-    }
+.nav-menu {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
-    nav a:hover {
-        opacity: 0.7;
-    }
+.nav-link {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
 
-    #log_but {
-        background: none;
-        border: 2px solid var(--text);
-        color: var(--text);
-        padding: 0.5rem 1rem;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+.login-button {
+  background: var(--primary);
+  color: var(--text);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
 
-    #log_but:hover {
-        background: rgba(255, 255, 255, 0.1);
-    }
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .nav-toggle {
+    display: block;
+  }
+
+  .nav-menu {
+    position: fixed;
+    top: 80px;
+    left: -100%;
+    flex-direction: column;
+    background: var(--surface);
+    width: 100%;
+    padding: 2rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .nav-menu.active {
+    left: 0;
+  }
+
+  .nav-link {
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+    margin: 0.5rem 0;
+  }
+
+  /* Keep login button visible on mobile */
+  .login-button {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .nav-right {
+    gap: 1rem;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 769px) {
+  .nav-right {
+    gap: 2.5rem;
+  }
+  
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .login-button:hover {
+    background: #1664c1;
+    transform: scale(1.05);
+  }
+}
+
 
     /* Reels Section */
     .reels-section {
