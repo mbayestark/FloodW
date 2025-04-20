@@ -101,7 +101,7 @@
           const data = await response.json();
           localStorage.setItem('token', data.token);
           
-          const returnTo = localStorage.getItem('returnTo') || 'reels.html';
+          const returnTo = localStorage.getItem('returnTo') || '/FloodW/reels';
           localStorage.removeItem('returnTo');
           window.location.href = returnTo;
 
@@ -135,7 +135,7 @@
           }
 
           // Auto-login after registration
-          const loginResponse = await fetch('`${baseURL}/login`', {
+          const loginResponse = await fetch(`${baseURL}/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
