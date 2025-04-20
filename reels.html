@@ -163,12 +163,7 @@
                 
                 setTimeout(() => toast.remove(), 5000);
         }
-        // Upload trigger
-uploadTrigger.addEventListener('click', () => {
-    checkAuthStatus() 
-        ? window.location.href = '/FloodW/uploadPage'
-        : loginModal.style.display = 'flex';
-});
+
 
 // Close modal function
 function closeModal() {
