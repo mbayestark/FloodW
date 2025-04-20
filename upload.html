@@ -245,12 +245,16 @@
     cursor: not-allowed;
   }
   </style>
-
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
   <script>
-    Weglot.initialize({
-        api_key: 'wg_53b3a6010f5487ae21b812aa6af5ea8a5'
-    });
-</script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'es,fr,de,zh-CN,ja,ru,ar',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
+    }
+    </script>
 </head>
 <body>
 <header>
@@ -268,12 +272,10 @@
           <li><a href="#">Forum</a></li>
       </ul>
       <button id="log_but">Log In</button>
+      <div id="google_translate_element" style="height: 30px;" ></div>
+
   </nav>
-  <script>
-    Weglot.initialize({
-        api_key: 'wg_53b3a6010f5487ae21b812aa6af5ea8a5'
-    });
-</script>
+
 </header>
 
   <div class="container">
