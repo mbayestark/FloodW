@@ -106,7 +106,7 @@
             // Upload trigger
             uploadTrigger.addEventListener('click', () => {
                 checkAuthStatus() 
-                    ? window.location.href = '/FloodW/uploadPage'
+                    ? window.location.href = `${baseURL}/uploadPage`
                     : loginModal.style.display = 'flex';
             });
 
