@@ -117,14 +117,14 @@
                     updateAuthUI();
                     window.location.reload();
                 } else {
-                    window.location.href = '/log-sign';
+                    window.location.href = '/FloodW/log-sign';
                 }
             });
         
             // Upload trigger
             uploadTrigger.addEventListener('click', () => {
                 checkAuthStatus() 
-                    ? window.location.href = '/upload.html'
+                    ? window.location.href = '/FloodW/upload.html'
                     : loginModal.style.display = 'flex';
             });
 
