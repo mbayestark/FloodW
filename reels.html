@@ -12,28 +12,37 @@
 <body>
 <!--Header Section -->
 <header>
-    <a href="/FloodW/" class="logo-container">
-        <div class="logo">
-            <img src="media/Picture1.png" alt="Flood Watch Logo">
+    <div class="header-container">
+        <a href="/FloodW/" class="brand">
+            <div class="logo">
+                <img src="media/Picture1.png" alt="Flood Watch Logo">
+            </div>
+            <h1>Flood Watch</h1>
+        </a>
+
+        <div class="nav-right">
+            <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
         </div>
-        <h1>Flood Watch</h1>
-    </a>
-    <nav>
-        <ul>
-            <li><a href="#solution">Robots</a></li>
-            <li><a href="/FloodW/reels">Stories</a></li>
-            <li><a href="#donate">Help Us</a></li>
-            <li><a href="#">Forum</a></li>
-        </ul>
-        <button id="log_but">Log In</button>
-    </nav>
+
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="#solution" class="nav-link">Robots</a></li>
+                <li><a href="/FloodW/reels" class="nav-link">Stories</a></li>
+                <li><a href="#donate" class="nav-link">Help Us</a></li>
+                <li><a href="#" class="nav-link">Forum</a></li>
+            </ul>
+        </nav>
+        <div class="nav-right">
+            <button id="desktopLogBut" class="login-button">Log In</button>
+        </div>
+    </div>
 </header>
 
 <section id="reels" class="reels-section">
     <!-- Preserved Reels Grid -->
     <div class="container">
         <h2>REELS</h2>
-        <h3>THIS IS WHAT PEOPLE ARE LIVING!</h3>
+        <h3>THIS IS WHAT PEOPLE ARE LIVING :(</h3>
         <div class="reels-grid" id="reelsGrid">
             <!-- Reels will be dynamically loaded here -->
         </div>
@@ -70,11 +79,18 @@
             const mediaInput = document.getElementById('fileInput');
             const mediaPreview = document.getElementById('mediaPreview');
             const uploadForm = document.getElementById('uploadForm');
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            navToggle.addEventListener('click', () => {
+                navMenu.classList.toggle('active');
+            });
 
-            const baseURL = window.location.hostname === "localhost"
-              ? "http://localhost:3002"
-              : "https://floodwatch-kbab.onrender.com";
-
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.nav-menu') && !e.target.closest('.nav-toggle')) {
+                    navMenu.classList.remove('active');
+                }
+            });
             
 
 
@@ -99,35 +115,35 @@
                     updateAuthUI();
                     window.location.reload();
                 } else {
-                    window.location.href = '/FloodW/log-sign';
+                    window.location.href = '/log-sign';
                 }
             });
         
             // Upload trigger
             uploadTrigger.addEventListener('click', () => {
                 checkAuthStatus() 
-                    ? window.location.href = 'upload.html'
+                    ? window.location.href = '/uploadPage'
                     : loginModal.style.display = 'flex';
             });
 
             //Display posts from database
             async function loadPosts() {
                 try {
-                    const response = await fetch(`${baseURL}/videos`);
+                    const response = await fetch('http://localhost:3002/videos');
                     
                     if (!response.ok) {
-                        throw new Error(`Server error: ${response.status} ${response.statusText}`);
+                    const errorData = await response.json();
+                    throw new Error(`Server error: ${errorData.error || response.statusText}`);
                     }
-            
+
                     const posts = await response.json();
                     renderPosts(posts);
-            
+
                 } catch (error) {
                     console.error('Post loading error:', error);
-                    showErrorToast(error.message);  // <- use this instead
+                    showErrorNotification(error.message);
                 }
-            }
-
+                }
 
             function renderPosts(posts) {
             const grid = document.getElementById('reelsGrid');
@@ -163,7 +179,12 @@
                 
                 setTimeout(() => toast.remove(), 5000);
         }
-
+        // Upload trigger
+uploadTrigger.addEventListener('click', () => {
+    checkAuthStatus() 
+        ? window.location.href = '/uploadPage'
+        : loginModal.style.display = 'flex';
+});
 
 // Close modal function
 function closeModal() {
