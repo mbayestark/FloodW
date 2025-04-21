@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Feedback | FloodWatch</title>
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <style>
+    /* Base */
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .feedback-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 30px;
+    }
+    .feedback-container h2 {
+      color: #0056b3; /* FloodWatch primary blue */
+      margin-bottom: 24px;
+      font-size: 1.75rem;
+    }
+    /* Labels & Inputs */
+    .feedback-container label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .feedback-container select,
+    .feedback-container input[type="tel"],
+    .feedback-container textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    .feedback-container .radio-group {
+      margin-bottom: 20px;
+    }
+    .feedback-container .radio-group label {
+      font-weight: normal;
+      margin-right: 16px;
+    }
+    /* Submit */
+    .feedback-container input[type="submit"] {
+      background: #0056b3;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 12px 24px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .feedback-container input[type="submit"]:hover {
+      background: #004494;
+    }
+
+    /* Audio‑record buttons */
+#record-btn,
+#stop-btn {
+  background: #0056b3;              /* FloodWatch blue */
+  border: none;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#record-btn:hover,
+#stop-btn:not([disabled]):hover {
+  background: #004494;              /* Darker on hover */
+}
+
+#stop-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Icon sizing & coloring */
+#record-btn img,
+#stop-btn ion-icon {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+}
+/* While recording: record button turns grey, stop button turns red */
+#record-btn.recording {
+  background: grey !important;
+  animation: pulse 1s infinite;
+}
+#stop-btn.recording {
+  background: red !important;
+}
+
+/* Disabled state on stop-btn (you already have this) */
+#stop-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+/* pulsating ring */
+@keyframes pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
+  70%  { box-shadow: 0 0 0 12px rgba(255, 0, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+}
+
+/* delete (“X”) button */
+#delete-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  line-height: 1;
+  padding: 0 6px;
+  margin-left: 8px;
+  color: #c00;
+  cursor: pointer;
+  display: none;    /* hidden until there’s something to delete */
+}
+
+
+/* If you need to override ion-icon color */
+ion-icon {
+  font-size: 24px;
+  color: #fff;
+}
+
+  </style>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+<script>
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'en',
+      includedLanguages: 'es,fr,de,zh-CN,ja,ru,ar',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  }
+  </script>
+</head>
+<body>
+  <div class="feedback-container">
+    <h2>We Value Your Feedback!</h2>
+    <div id="google_translate_element" ></div>
+
+    <form id="feedback-form">
+      
+      <!-- 1 -->
+      <label for="navigate">1. How easy was it to navigate the website?</label>
+      <select id="navigate" name="navigate" required>
+        <option value="" disabled selected>Select one</option>
+        <option>Very easy</option>
+        <option>Easy</option>
+        <option>Neutral</option>
+        <option>Difficult</option>
+        <option>Very difficult</option>
+      </select>
+
+      <!-- 2 -->
+      <label for="design-rate">
+        2. Rate the overall design and layout of the website  
+        <small>(1 = Poor, 5 = Excellent)</small>
+      </label>
+      <select id="design-rate" name="design_rate" required>
+        <option value="" disabled selected>Select one</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+
+      <!-- 3 -->
+      <label>3. Did you encounter any technical issues while using the website?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="issues" value="No issues" required> No issues</label>
+        <label><input type="radio" name="issues" value="Minor issues"> Minor issues</label>
+        <label><input type="radio" name="issues" value="Major issues"> Major issues</label>
+        <label>
+          <input type="radio" name="issues" value="Didn’t use fully">
+          I didn’t use the website fully
+        </label>
+      </div>
+
+      <!-- 4 -->
+      <label for="overall">4. Describe your overall experience:</label>
+      <textarea id="overall" name="overall_experience" rows="3" ></textarea>
+
+      <!-- 5 -->
+      <label for="relevance">
+        5. How relevant did you find the content to flooding challenges in Wakhinane?  
+        <small>(1 = Not relevant, 5 = Very relevant)</small>
+      </label>
+      <select id="relevance" name="relevance" required>
+        <option value="" disabled selected>Select one</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+
+      <!-- 6 -->
+      <label>6. Was the information presented in a way that was clear and understandable?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="clear" value="Yes" required> Yes</label>
+        <label><input type="radio" name="clear" value="Somewhat"> Somewhat</label>
+        <label><input type="radio" name="clear" value="No"> No</label>
+      </div>
+
+      <!-- 7 -->
+      <label>7. Did the proposed solution (FlowBot) seem practical and realistic to you?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="practical" value="Yes" required> Yes</label>
+        <label><input type="radio" name="practical" value="No"> No</label>
+        <label><input type="radio" name="practical" value="Not sure"> I’m not sure</label>
+      </div>
+
+      <!-- 8 -->
+      <label for="interesting">
+        8. What part of the website or solution did you find most interesting or impactful?
+      </label>
+      <textarea id="interesting" name="interesting_part" rows="3"></textarea>
+
+      <!-- 9 -->
+      <label for="improvements">9. Any suggestions to improve the website?</label>
+      <textarea id="improvements" name="improvements" rows="3"></textarea>
+
+      <!-- 10 -->
+      <label>10. Would you recommend this website to others interested in flood solutions?</label>
+      <div class="radio-group">
+        <label><input type="radio" name="recommend" value="Yes" required> Yes</label>
+        <label><input type="radio" name="recommend" value="No"> No</label>
+        <label><input type="radio" name="recommend" value="Maybe"> Maybe</label>
+      </div>
+
+      <!-- Insert this where you’d have your paragraph question -->
+        <div id="audio-feedback">
+            <label>Describe your experience (or record your voice):</label><br>
+            <button type="button" id="record-btn"><img src="media/seo-social-web-network-internet_09_icon-icons.com_61507.png" alt=""></button>
+            <button type="button" id="stop-btn" disabled><ion-icon name="stop-circle-outline"></ion-icon></button>
+            <div style="display: flex;">
+                <audio id="player" controls style="display:none; margin-top:12px;"></audio>
+                <button type="button" id="delete-btn" aria-label="Delete recording">×</button>
+
+            </div>
+
+            <!-- This hidden input will carry the audio file in base64 -->
+            <input type="hidden" name="audio_blob" id="audio-blob">
+        </div>
+  
+
+      <!-- 11 -->
+      <label for="phone">11. Phone number (optional):</label>
+      <input type="tel" id="phone" name="phone" placeholder="+221 77 123 45 67">
+
+      <input type="submit" value="Submit Feedback">
+    </form>
+    <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+  </div>
+</body>
+<script>
+    let recorder, chunks = [];
+    const recordBtn = document.getElementById('record-btn');
+    const stopBtn   = document.getElementById('stop-btn');
+    const player    = document.getElementById('player');
+    const blobInput = document.getElementById('audio-blob');
+    const deleteBtn = document.getElementById('delete-btn');
+
+    document.getElementById("feedback-form").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        // Store values locally (optional; for persistence before redirect or reload)
+        for (let [key, value] of formData.entries()) {
+            localStorage.setItem(key, value);
+        }
+
+        try {
+            const response = await fetch(
+            "https://script.google.com/macros/s/AKfycbxA5n4ia7wU4kzURMZ-LQr3SPVFWWcR_qVPokvBaELBlCeAVWsNVOICncdPqpoq9KuR/exec",
+            {
+                method: "POST",
+                body: formData,
+            }
+            );
+
+            if (response.ok) {
+            // Clear localStorage if desired
+            localStorage.clear();
+
+            // Redirect after successful submission
+            window.location.href = "/FloodW/";
+            } else {
+            alert("There was an error submitting your feedback. Please try again.");
+            }
+        } catch (error) {
+            alert("Submission failed. Please check your internet connection.");
+            console.error(error);
+        }
+    });
+
+
+
+    async function startRecording() {
+  recordBtn.classList.add('recording');
+  stopBtn.classList.add('recording');
+  deleteBtn.style.display = 'none';       // hide delete while recording
+
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  recorder = new MediaRecorder(stream);
+  recorder.ondataavailable = e => chunks.push(e.data);
+  recorder.onstop = () => {
+    const blob = new Blob(chunks, { type: 'audio/webm' });
+    chunks = [];
+
+    // show playback
+    player.src = URL.createObjectURL(blob);
+    player.style.display = 'block';
+
+    // show delete button
+    deleteBtn.style.display = 'inline-block';
+
+    // encode for form submit
+    const reader = new FileReader();
+    reader.onload = () => blobInput.value = reader.result;
+    reader.readAsDataURL(blob);
+  };
+  recorder.start();
+  recordBtn.disabled = true;
+  stopBtn.disabled   = false;
+}
+
+function stopRecording() {
+  recordBtn.classList.remove('recording');
+  stopBtn.classList.remove('recording');
+  recorder.stop();
+  recordBtn.disabled = false;
+  stopBtn.disabled   = true;
+}
+
+// delete the recorded chunk
+deleteBtn.addEventListener('click', () => {
+  player.src = '';
+  player.style.display = 'none';
+  blobInput.value = '';
+  deleteBtn.style.display = 'none';
+});
+  
+    recordBtn.addEventListener('click',  startRecording);
+    stopBtn.addEventListener('click',   stopRecording);
+  </script>
+  
+</html>
