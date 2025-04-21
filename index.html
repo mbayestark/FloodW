@@ -3,244 +3,118 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Flood Watch - Connecting communities with flood relief resources and solutions worldwide." />
+  <meta property="og:title" content="Flood Watch - Global Flood Relief" />
+  <meta property="og:description" content="Join us in providing immediate relief and long-term resilience to communities affected by flooding." />
+  <meta property="og:image" content="/media/og-image.png" />
+  <meta property="og:type" content="website" />
   <title>Flood Watch - Global Flood Relief</title>
-  <style>
-    /* ===== Reset & Base ===== */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background-color: #f5f5f5; color: #333; line-height: 1.6; }
-    a { text-decoration: none; color: inherit; }
-    img, video, iframe { max-width: 100%; height: 100%; border-radius: 8px ;display: block; transition: transform 0.3s ease, background-color 0.3s ease;
- }
-    img:hover,
-    video:hover {
-      transform: scale(1.05);
-      background-color: #1a73e8;
+
+  <!-- Google Translate -->
+  <script>
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'en',
+        includedLanguages: 'es,fr,de,zh-CN,ja,ru,ar',
+        layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+      }, 'google_translate_element');
     }
+  </script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" defer></script>
+
+  <style>
+    :root {
+      --primary: #1a73e8;
+      --primary-dark: #1558b0;
+      --bg: #f5f5f5;
+      --text: #333;
+      --muted: #666;
+      --light: #eee;
+    }
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+    img, video, iframe { max-width: 100%; height: auto; border-radius: 8px; display: block; transition: transform 0.3s ease; }
+    img:hover, video:hover { transform: scale(1.05); }
 
     /* ===== Header & Nav ===== */
     header { background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-    .header-container {
-      display: flex; justify-content: space-between; align-items: center;
-      max-width: 1200px; margin: 0 auto; padding: 1rem;
-      flex-wrap: wrap;
-    }
+    .header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 1rem; flex-wrap: wrap; }
     .brand { display: flex; align-items: center; gap: 1rem; }
-    .logo { width: 50px; height: 50px; background: #1a73e8; border-radius: 50%; padding: 0.5rem; display: flex; align-items: center; justify-content: center; }
+    .logo { width: 50px; height: 50px; background: var(--primary); border-radius: 50%; padding: 0.5rem; display: flex; align-items: center; justify-content: center; }
     .logo img { width: 60%; height: 60%; object-fit: contain; }
-    header h1 { font-size: 1.5rem; color: #333; }
-
     .nav-toggle { display: none; background: none; border: none; cursor: pointer; font-size: 1.5rem; }
-    .nav-menu {
-      display: flex; gap: 1.5rem; list-style: none; transition: left 0.3s ease;
-    }
-    .nav-menu li { flex: 0 1 auto; }
-    .nav-link { text-transform: uppercase; font-size: 0.9rem; color: #666; padding: 0.5rem 0.75rem; transition: color 0.3s ease; }
-    .nav-link:hover { color: #1a73e8; }
-
+    .nav-toggle[aria-expanded="true"] { color: var(--primary); }
+    .nav-menu { display: flex; gap: 1.5rem; list-style: none; }
+    .nav-link { text-transform: uppercase; font-size: 0.9rem; color: var(--muted); padding: 0.5rem 0.75rem; transition: color 0.3s ease; }
+    .nav-link:hover { color: var(--primary); }
     @media (max-width: 768px) {
       .nav-toggle { display: block; }
-      .nav-menu {
-        position: fixed; top: 80px; left: -100%; flex-direction: column;
-        background: #fff; width: 100%; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      }
+      .nav-menu { position: fixed; top: 80px; left: -100%; flex-direction: column; background: #fff; width: 100%; padding: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); transition: left 0.3s ease; }
       .nav-menu.active { left: 0; }
       .nav-menu li { margin: 0.5rem 0; }
     }
 
-    /* ===== Container ===== */
+    /* ===== Container & Section Titles ===== */
     .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-
-    /* ===== Sections ===== */
     section { margin-bottom: 3rem; }
-    section h2 { font-size: 2rem; color: #1a73e8; text-align: center; margin-bottom: 1.5rem; }
+    section h2 { font-size: 2rem; color: var(--primary); text-align: center; margin-bottom: 1.5rem; }
 
-    /* Problem Section */
-    .problem-content {
-      display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;
-    }
+    /* ===== Problem Section ===== */
+    .problem-content { display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
     .problem-text { flex: 1; min-width: 280px; }
-    .problem-text h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+    .problem-text h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--text); }
     .problem-text p { margin-bottom: 1rem; }
-    .problem-media {
-      flex: 1; min-width: 280px; background: #eee; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center; min-height: 300px;
-    }
-    .problem-media iframe { border-radius: 8px; }
+    .problem-media { flex: 1; min-width: 280px; background: var(--light); display: flex; align-items: center; justify-content: center; min-height: 400px; overflow: hidden; }
+    .problem-media iframe { width: 100%; height: 100%; object-fit: cover; }
 
-    /* Solution Section */
-    section {
-      margin-bottom: 3rem;
-    }
-    section h2 {
-      font-size: 2rem;
-      color: #1a73e8;
-      text-align: center;
-      margin-bottom: 1.5rem;
-    }
+    /* ===== Solution Section ===== */
+    .video-container { background: var(--light); border-radius: 8px; height: 450px; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; overflow: hidden; }
+    .video-container video { width: 100%; height: 100%; object-fit: cover; }
+    .design-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+    .design-item { background: var(--light); border-radius: 8px; height: 180px; display: flex; align-items: center; justify-content: center; color: var(--muted); overflow: hidden; }
+    .design-item.large { grid-column: span 2; height: 300px; }
+    .design-item img, .design-item video { width: 100%; height: 100%; object-fit: cover; }
 
-    /* Problem Section */
-    .problem-section .problem-content {
-      display: flex;
-      gap: 2rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .problem-text {
-      flex: 1;
-      min-width: 280px;
-    }
-    .problem-text h3 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      color: #333;
-    }
-    .problem-text p {
-      margin-bottom: 1rem;
-    }
-    .problem-media {
-      flex: 1;
-      min-width: 280px;
-      background: #eee;
-      border-radius: 8px;
-      min-height: 300px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #999;
-    }
+    /* ===== Donation Section ===== */
+    .donation-section .donation-options { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; }
+    .donation-option { background: var(--light); border: none; border-radius: 8px; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--text); transition: transform 0.3s ease, background 0.3s ease; cursor: pointer; }
+    .donation-option:hover { background: var(--primary); color: #fff; transform: scale(1.05); }
 
-    /* Solution Section */
-    .video-container {
-      background: #eee;
-      border-radius: 8px;
-      height: 450px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #999;
-      margin-bottom: 2rem;
-    }
-    .design-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1rem;
-    }
-    .design-item {
-      background: #eee;
-      border-radius: 8px;
-      height: 180px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #999;
-    }
-    .design-item.large {
-      grid-column: span 2;
-      height: 300px;
-    }
+    /* ===== Features Section ===== */
+    .features-section { background: #f9f9f9; padding: 2rem 0; }
+    .features-container { display: flex; flex-wrap: wrap; justify-content: space-around; gap: 2rem; max-width: 1200px; margin: 0 auto; }
+    .feature { flex: 1; min-width: 220px; max-width: 300px; text-align: center; padding: 1rem; }
+    .feature-icon { width: 80px; height: 80px; background: var(--light); border-radius: 50%; margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; font-size: 2rem; }
+    .feature h3 { margin-bottom: 0.5rem; font-size: 1.2rem; }
+    .feature p { font-size: 0.9rem; color: var(--muted); }
 
-    /* Donation Section */
-    .donation-options {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    .donation-option {
-      background: #eee;
-      border-radius: 8px;
-      width: 150px;
-      height: 150px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: #333;
-      transition: transform 0.3s ease, background 0.3s ease;
-      cursor: pointer;
-    }
-    .donation-option:hover {
-      background: #1a73e8;
-      color: #fff;
-      transform: scale(1.05);
-    }
-
-    /* Features Section */
-    .features-section {
-      background: #f9f9f9;
-      padding: 2rem 0;
-    }
-    .features-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      gap: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    .feature {
-      flex: 1;
-      min-width: 220px;
-      max-width: 300px;
-      text-align: center;
-      padding: 1rem;
-    }
-    .feature-icon {
-      width: 80px;
-      height: 80px;
-      background: #eee;
-      border-radius: 50%;
-      margin: 0 auto 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-    }
-    .feature h3 {
-      margin-bottom: 0.5rem;
-      font-size: 1.2rem;
-    }
-    .feature p {
-      font-size: 0.9rem;
-      color: #666;
-    }
-
-    /* Footer */
-    footer {
-      background: #fff;
-      padding: 1rem;
-      text-align: center;
-      border-top: 1px solid #eee;
-      font-size: 0.9rem;
-    }
-    footer nav ul {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      list-style: none;
-      padding: 0;
-      flex-wrap: wrap;
-    }
-    footer nav ul li a {
-      transition: color 0.3s ease;
-      color: #666;
-    }
-    footer nav ul li a:hover {
-      color: #1a73e8;
-    }
-
-    @media (max-width: 480px) {
-      .donation-option { width: 120px; height: 120px; }
-    }
+    /* ===== Footer ===== */
+    footer { background: #fff; padding: 1rem; text-align: center; border-top: 1px solid #eee; font-size: 0.9rem; }
+    footer nav ul { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; list-style: none; }
+    footer nav ul li a { transition: color 0.3s ease; color: var(--muted); }
+    footer nav ul li a:hover { color: var(--primary); }
+    @media (max-width: 480px) { .donation-option { width: 120px; height: 120px; } }
   </style>
-<script src="https://cdn.weglot.com/weglot.min.js"></script>
-<script>
-  Weglot.initialize({
-    api_key: 'YOUR_API_KEY' // replace with your actual Weglot API key
-  });
-</script>
-
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      const navToggle = document.querySelector('.nav-toggle');
+      const navMenu = document.querySelector('.nav-menu');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.addEventListener('click', () => {
+        const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+        navToggle.setAttribute('aria-expanded', String(!expanded));
+        navMenu.classList.toggle('active');
+      });
+      document.addEventListener('click', e => {
+        if (!e.target.closest('.header-container')) {
+          navMenu.classList.remove('active');
+          navToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
+  </script>
 </head>
 <body>
   <header>
@@ -250,36 +124,26 @@
         <h1 class="notranslate">Flood Watch</h1>
       </a>
       <button class="nav-toggle" aria-label="Toggle navigation">☰</button>
-      <nav><ul class="nav-menu">
-        <li><a href="#solution" class="nav-link">Robots</a></li>
-        <li><a href="/FloodW/reels" class="nav-link">Stories</a></li>
-        <li><a href="#donate" class="nav-link">Help Us</a></li>
-          <li><a href="/FloodW/form" class="nav-link" >Give us your feedbacks!</a></li>
-      </ul></nav>
+      <nav>
+        <ul class="nav-menu">
+          <li><a href="#solution" class="nav-link">Robots</a></li>
+          <li><a href="/FloodW/reels" class="nav-link">Stories</a></li>
+          <li><a href="#donate" class="nav-link">Help Us</a></li>
+          <li><a href="/FloodW/form" class="nav-link">Give us your feedbacks!</a></li>
+        </ul>
+      </nav>
     </div>
-    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<script>
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-      pageLanguage: 'en',
-      includedLanguages: 'es,fr,de,zh-CN,ja,ru,ar',
-      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-    }, 'google_translate_element');
-  }
-  </script>
   </header>
 
   <main>
-          <div id="google_translate_element" ></div>
+    <div id="google_translate_element" style="padding: 1rem; text-align: right;"></div>
 
     <section id="problem" class="problem-section">
       <div class="container">
         <h2>THE PROBLEM</h2>
         <div class="problem-content">
           <div class="problem-text">
-            <h3>
-              A Global Occurence
-            </h3>
+            <h3>A Global Occurrence</h3>
             <p>
               The devastating floods have affected thousands of communities around the globe. Families have lost their homes, belongings, and in some cases, loved ones.
             </p>
@@ -289,9 +153,8 @@
             <p>
               Our initiative connects affected individuals with resources, raises global awareness, and facilitates community-driven solutions for both immediate relief and long-term resilience.
             </p>
-          </div>
           <div class="problem-media">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/IdoAFYGyWbY?si=e_8OVfjC3a1PTVJ-" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="border-radius: 10px;"></iframe>
+            <iframe src="https://www.youtube.com/embed/IdoAFYGyWbY?si=e_8OVfjC3a1PTVJ-" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
           </div>
         </div>
       </div>
@@ -301,31 +164,25 @@
       <div class="container">
         <h2>THE SOLUTION</h2>
         <div class="video-container">
-             <video src="media/VIDEO-2025-03-06-23-56-40 2.mp4" controls></video>
+          <video src="media/VIDEO-2025-03-06-23-56-40 2.mp4" controls></video>
         </div>
-        <h3>DESIGN</h3>
+        <h3 class="notranslate" style="text-align:center;">DESIGN</h3>
         <div class="design-grid">
-          <div class="design-item">
-            <img src="media/IMG_AC64AD15FCEB-1.jpeg" alt="Design Image" />
-          </div>
-          <div class="design-item">
-            <video src="" controls></video>
-          </div>
-          <div class="design-item large">
-            <!-- Placeholder for large design element -->
-          </div>
+          <div class="design-item"><img src="media/IMG_AC64AD15FCEB-1.jpeg" alt="Design Image"></div>
+          <div class="design-item"><video src="" controls></video></div>
+          <div class="design-item large"></div>
         </div>
       </div>
     </section>
 
     <section id="donate" class="donation-section">
-      <div class="container">
+      <div class="notranslate">
         <h2>DONATE!</h2>
         <div class="donation-options">
-          <div class="donation-option">OM</div>
-          <div class="donation-option">WAVE</div>
-          <div class="donation-option">YAS</div>
-          <div class="donation-option">BANK DEPOSIT</div>
+          <button type="button" class="donation-option">OM</button>
+          <button type="button" class="donation-option">WAVE</button>
+          <button type="button" class="donation-option">YAS</button>
+          <button type="button" class="donation-option">BANK DEPOSIT</button>
         </div>
       </div>
     </section>
@@ -346,11 +203,11 @@
             <p>Discover solutions developed to help communities</p>
           </div>
         </a>
-        <a href="#">
+        <a href="/FloodW/form">
           <div class="feature">
             <div class="feature-icon">💬</div>
-            <h3>FORUM</h3>
-            <p>Share your thoughts or ask an expert a question</p>
+            <h3>FORM</h3>
+            <p>Share us your thoughts on the website! Give your feedbacks here.</p>
           </div>
         </a>
       </div>
@@ -367,15 +224,5 @@
       </ul>
     </nav>
   </footer>
-  <script>
-    const navToggle = document.querySelector('.nav-toggle');
-    const navMenu = document.querySelector('.nav-menu');
-    navToggle.addEventListener('click', () => navMenu.classList.toggle('active'));
-    document.addEventListener('click', e => {
-      if (!e.target.closest('.nav-menu') && !e.target.closest('.nav-toggle')) {
-        navMenu.classList.remove('active');
-      }
-    });
-  </script>
 </body>
 </html>
