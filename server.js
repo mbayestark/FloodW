@@ -233,6 +233,9 @@ app.get('/log-sign', (req, res) => {
 app.get('/uploadPage', (req, res) => {
   res.sendFile(path.join(__dirname, 'upload.html'));
 });
+app.get('/form', (req, res) => {
+  res.sendFile(path.join(__dirname, 'form.html'));
+});
 
 // Start Server
 app.listen(port, () => {
