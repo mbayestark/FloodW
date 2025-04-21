@@ -5,6 +5,7 @@
   <title>Feedback | FloodWatch</title>
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
   <style>
     /* Base */
@@ -141,16 +142,6 @@ ion-icon {
 }
 
   </style>
-  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-<script>
-  function googleTranslateElementInit() {
-    new google.translate.TranslateElement({
-      pageLanguage: 'en',
-      includedLanguages: 'es,fr,de,zh-CN,ja,ru,ar',
-      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
-    }, 'google_translate_element');
-  }
-  </script>
 </head>
 <body>
   <div class="feedback-container">
@@ -366,6 +357,14 @@ deleteBtn.addEventListener('click', () => {
   
     recordBtn.addEventListener('click',  startRecording);
     stopBtn.addEventListener('click',   stopRecording);
+
+  function googleTranslateElementInit() {
+    new google.translate.TranslateElement({
+      pageLanguage: 'en',
+      includedLanguages: 'es,fr,de,zh-CN,ja,ru,ar',
+      layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+    }, 'google_translate_element');
+  }
   </script>
   
 </html>
